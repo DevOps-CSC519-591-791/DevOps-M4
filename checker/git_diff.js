@@ -1,20 +1,33 @@
 var git = require('simple-git')(__dirname+'/../../solar-calc');
+var parse = require('./diff-parse/lib/parse');
 
-// console.log(simpleGit.branch());
-git.listRemote(['--get-url'], function(err, data) {
-            if (!err) {
-                console.log('Remote url for repository at solar-clac:');
-                console.log(data);
-            }
-        });
+function diff_the_project(callback){
+	var dict = [];
+	git.diff(function(err,data){
+		var files = parse(data);
+		// console.log(files.length); // number of patched files
+		files.forEach(function(file) {
+			// console.log(file.from)
+			file.lines.forEach(function(line){
+				if(line.type == 'del'){
+					// console.log(line);
+					dict.push({file: file.from, type: 'del', ln: line.ln});
+				}
+			});
 
-git.diffSummary(function(err,data){
-	console.log('the diffs:');
-	console.log(data);
-});
+			file.lines.forEach(function(line){
+				if(line.type == 'add'){
+					// console.log(line);
+					dict.push({file: file.from, type: 'add', ln: line.ln});
+				}
+			});
+		});
+		callback(dict);
+	});
+}
 
-
-git.diff(['src/moon.js'], function(err,data){
-	console.log('the diffs:');
-	console.log(data);
+diff_the_project(function(diffinfo){
+	diffinfo.forEach(function(info){
+		console.log(info);
+	});
 });
