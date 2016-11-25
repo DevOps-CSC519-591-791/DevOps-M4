@@ -41,7 +41,7 @@ function ComplexityBuilder()
 		   (
 			"{0}(): {1} ~ {2}\n" +
 			"============\n" +
-				"MethodContent: {3}\n\n"
+				"MethodContent: {3}\n"
 			)
 			.format(this.FunctionName, this.StartLine, this.EndLine, this.MethodContent)
 		);
@@ -101,7 +101,6 @@ function complexity(filePath, lineNum)
 			}
 		}
 	});
-
 }
 
 // Helper function for counting children of node.
