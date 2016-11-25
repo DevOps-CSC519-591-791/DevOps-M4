@@ -1,9 +1,9 @@
 var git = require('simple-git')(__dirname+'/../../solar-calc');
 var parse = require('./diff-parse/lib/parse');
 
-function diff_the_project(callback){
+function diff_the_project(diffargs, callback){
 	var dict = [];
-	git.diff(function(err,data){
+	git.diff(diffargs, function(err,data){
 		var files = parse(data);
 		// console.log(files.length); // number of patched files
 		files.forEach(function(file) {
@@ -26,7 +26,7 @@ function diff_the_project(callback){
 	});
 }
 
-diff_the_project(function(diffinfo){
+diff_the_project(['24892ac078a1bfc6e91eff6edccaa0903b2ee403'],function(diffinfo){
 	diffinfo.forEach(function(info){
 		console.log(info);
 	});
