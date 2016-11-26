@@ -84,6 +84,9 @@ function complexity(filePath, lineNum)
 			builder.FunctionName = functionName(node);
 			builder.StartLine    = node.loc.start.line;
 			builder.EndLine 	 = node.loc.end.line;
+
+			// if certain line number located between one methods' start line and end line
+			// print the line number and lines of this method
 			if (lineNum >= builder.StartLine && lineNum <= builder.EndLine)
 			{
 				file = readline(filePath);
