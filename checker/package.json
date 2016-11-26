@@ -18,7 +18,7 @@
     "mock-fs": "^3.11.0",
     "random-js": "^1.0.8",
     "simple-git": "^1.62.0",
-    "string": "^3.3.1",
+    "string": "~3.3.3",
     "underscore": "^1.8.3",
     "underscore.string": "~2.3"
   }
