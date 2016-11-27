@@ -77,11 +77,11 @@ function complexity(filePath, lineNum)
 	// Tranverse program with a function visitor.
 	traverseWithParents(ast, function (node) 
 	{
-		if (node.type === 'FunctionDeclaration') 
+		if (node.type === 'FunctionDeclaration' || node.type === 'MethodDefinition') 
 		{
 			var builder = new ComplexityBuilder();
 
-			builder.FunctionName = functionName(node);
+			builder.FunctionName = functionName(node, node.type);
 			builder.StartLine    = node.loc.start.line;
 			builder.EndLine 	 = node.loc.end.line;
 
@@ -106,31 +106,15 @@ function complexity(filePath, lineNum)
 	});
 }
 
-// Helper function for counting children of node.
-function childrenLength(node)
-{
-	var key, child;
-	var count = 0;
-	for (key in node) 
-	{
-		if (node.hasOwnProperty(key)) 
-		{
-			child = node[key];
-			if (typeof child === 'object' && child !== null && key != 'parent') 
-			{
-				count++;
-			}
-		}
-	}	
-	return count;
-}
-
 // Helper function for printing out function name.
-function functionName( node )
+function functionName( node, type )
 {
-	if( node.id )
+	if( type === 'FunctionDeclaration' && node.id )
 	{
 		return node.id.name;
+	}
+	if( type === 'MethodDefinition' && node.key ){
+		return node.key.name;
 	}
 	return "anon function @" + node.loc.start.line;
 }
