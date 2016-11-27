@@ -20,6 +20,7 @@
     "simple-git": "^1.62.0",
     "string": "~3.3.3",
     "underscore": "^1.8.3",
-    "underscore.string": "~2.3"
+    "underscore.string": "~2.3",
+    "diff-parse": "0.0.13"
   }
 }

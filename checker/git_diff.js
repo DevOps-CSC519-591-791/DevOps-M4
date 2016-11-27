@@ -1,5 +1,5 @@
 var git = require('simple-git')(__dirname+'/../../solar-calc');
-var parse = require('./diff-parse/lib/parse');
+var parse = require('diff-parse');
 
 function diff_the_project(diffargs, callback){
 	var dict = [];
