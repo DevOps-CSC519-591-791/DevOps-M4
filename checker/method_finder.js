@@ -37,14 +37,15 @@ function ComplexityBuilder()
 
 	this.report = function()
 	{
-		console.log(
-		   (
-			"{0}(): {1} ~ {2}\n" +
-			"============\n" +
-				"MethodContent: {3}\n"
-			)
-			.format(this.FunctionName, this.StartLine, this.EndLine, this.MethodContent)
-		);
+		// console.log(
+		//    (
+		// 	"{0}(): {1} ~ {2}\n" +
+		// 	"============\n" +
+		// 		"MethodContent: {3}\n"
+		// 	)
+		// 	.format(this.FunctionName, this.StartLine, this.EndLine, this.MethodContent)
+		// );
+		console.log(this.FunctionName);
 	}
 };
 
@@ -93,7 +94,7 @@ function complexity(filePath, lineNum)
 				file.on('line', function(line, lineCount, byteCount) {
 					if (lineCount >= builder.StartLine && lineCount <= builder.EndLine)
 					{
-						console.log(("{0}: {1}").format(lineCount, line));
+						// console.log(("{0}: {1}").format(lineCount, line));
 						builder.MethodContent += (line + '\n');
 					}
 			 	}).on('error', function(e) {
