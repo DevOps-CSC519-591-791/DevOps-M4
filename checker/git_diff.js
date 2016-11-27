@@ -1,8 +1,9 @@
-var git = require('simple-git')(__dirname+'/../../solar-calc');
+var git = require('simple-git')(__dirname + '/../../solar-calc');
 var parse = require('diff-parse');
 
-function diff_the_project(diffargs, callback){
+this.diff_the_project = function (diffargs, callback){
 	var dict = [];
+	// get the diff for all file in the current repo compared to the last commit
 	git.diff(diffargs, function(err,data){
 		var files = parse(data);
 		// console.log(files.length); // number of patched files
