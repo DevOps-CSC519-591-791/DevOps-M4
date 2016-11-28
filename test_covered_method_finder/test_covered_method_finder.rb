@@ -50,6 +50,12 @@ class TestCoveredMethodFinder
 		end
 	end
 
+	def cache_file_content_insertion(file_name)
+		File.readlines(file_name).each do |line|
+			
+		end
+	end
+
 	def parse_istanbul_output(parent_dir_path, 
 							  source_file_arr,
 							  covered_method_hash,

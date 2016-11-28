@@ -1,3 +1,4 @@
+var fs = require("fs");
 var exec = require('child_process').exec;
 var gitDiff = require('./git_diff.js');
 
@@ -11,6 +12,11 @@ function changedMethodFinder(callback){
 		diffinfo.forEach(function(info){
 			// console.log(info);
 			if(!(info['file'] === '/dev/null') && info['type'] === 'add'){
+
+				if (changedMethod.indexOf(info['file']) == -1){
+					changedMethod.push(info['file']);
+				}
+				
 				filePath = __dirname + '/../../solar-calc/' + info['file'];
 				lineNum = info['ln'];
 
@@ -29,4 +35,7 @@ function changedMethodFinder(callback){
 
 changedMethodFinder(function(changedMethod){
 	console.log(changedMethod);
+	fs.writeFile(__dirname + '/../results/commit_changed_method', changedMethod.toString(), function (err) {
+		  if (err) { throw err; }
+	});
 })
