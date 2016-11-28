@@ -7,10 +7,16 @@ class TestCoveredMethodFinder
 		separated_test_folder = "#{parent_dir_path}/solar-calc/separated_tests"
 		json_file_path = "#{parent_dir_path}/solar-calc/coverage/coverage.json"
 		source_file_arr = ['moon.js', 'solarCalc.js', 'sun.js']
+		# filename -> method name -> test case filename
 		covered_method_hash = {'moon.js' => {},
 							   'solarCalc.js'=> {},
 							   'sun.js' => {}
 							  }
+		# filename -> line number -> method name
+		cache_covered_method_hash = {'moon.js' => {},
+							   		 'solarCalc.js'=> {},
+							   		 'sun.js' => {}
+							   		}
 		#
 		# create csv file to store results
 		#
@@ -29,15 +35,15 @@ class TestCoveredMethodFinder
 			# goto solar-calc dir; generate coverage.json; go back to current dir
 			system("cd #{parent_dir_path}/solar-calc && \
 				    ./node_modules/.bin/istanbul cover --report json ./node_modules/.bin/_mocha separated_tests/#{file_name} > out && \
-				    rm out && \
 				    cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder")
-			
+
 			# read the coverage.json output and extract info
 			file = File.read(json_file_path)
 			json_content = JSON.parse(file)
 			parse_istanbul_output(parent_dir_path, 
 								  source_file_arr,
-								  covered_method_hash, 
+								  covered_method_hash,
+								  cache_covered_method_hash, 
 								  file_name, 
 								  json_content, 
 								  result_file_path)
@@ -46,7 +52,8 @@ class TestCoveredMethodFinder
 
 	def parse_istanbul_output(parent_dir_path, 
 							  source_file_arr,
-							  covered_method_hash, 
+							  covered_method_hash,
+							  cache_covered_method_hash, 
 							  file_name, 
 							  json_content,
 							  result_file_path)
@@ -90,23 +97,32 @@ class TestCoveredMethodFinder
 					curr_line = json_content[key]['statementMap'][map_id]['start']['line']
 					unless line_num.include? curr_line
 						line_num << curr_line
-						# run method_finder.js and get method name
-						method_name = `cd #{parent_dir_path}/DevOps-M4/checker && \
-				    	    node method_finder.js ../../solar-calc/src/#{source_file}:#{curr_line} && \
-				    		cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder`
-				    	method_name = method_name.sub("\n", '')
+
+						# check cache first
+						if !cache_covered_method_hash[source_file].has_key? curr_line
+							# run method_finder.js and get method name
+							method_name = `cd #{parent_dir_path}/DevOps-M4/checker && \
+					    	    node method_finder.js ../../solar-calc/src/#{source_file}:#{curr_line} && \
+					    		cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder`
+					    	method_name = method_name.sub("\n", '')
+				    		# update cache_covered_method_hash
+				    		cache_covered_method_hash[source_file][curr_line] = method_name
+					    else
+					    	method_name = cache_covered_method_hash[source_file][curr_line]
+				    	end
 
 				    	if !method_name.empty? and !covered_method_hash[source_file].has_key? method_name
 				    		covered_method_hash[source_file][method_name] = []
 				    	end
 
-				    	if covered_method_hash[source_file][method_name] and covered_method_hash[source_file][method_name].include? file_name
+				    	if covered_method_hash[source_file][method_name] and !covered_method_hash[source_file][method_name].include? file_name
 				    		# file_name here is test case filename
 				    		covered_method_hash[source_file][method_name] << file_name
 				    	end
 				    end
 				end
 			end
+
 			puts "Checking covered method in [#{source_file}] by running test [#{file_name}] ..."
 			puts '-' * 10
 		end
