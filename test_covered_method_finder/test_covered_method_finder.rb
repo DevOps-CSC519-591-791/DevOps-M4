@@ -98,9 +98,9 @@ class TestCoveredMethodFinder
 			key = "#{parent_dir_path}/solar-calc/lib/#{source_file}"
 			line_num = []
 			covered_methods = []
-			json_content[key]['s'].each do |map_id, value|
+			json_content[key]['f'].each do |map_id, value|
 				if value > 0 # occur more than one line
-					curr_line = json_content[key]['statementMap'][map_id]['start']['line']
+					curr_line = json_content[key]['fnMap'][map_id]['line']
 					unless line_num.include? curr_line
 						line_num << curr_line
 
@@ -108,7 +108,7 @@ class TestCoveredMethodFinder
 						if !cache_covered_method_hash[source_file].has_key? curr_line
 							# run method_finder.js and get method name
 							method_name = `cd #{parent_dir_path}/DevOps-M4/checker && \
-					    	    node method_finder.js ../../solar-calc/src/#{source_file}:#{curr_line} && \
+					    	    node method_finder.js ../../solar-calc/lib/#{source_file}:#{curr_line} && \
 					    		cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder`
 					    	method_name = method_name.sub("\n", '')
 				    		# update cache_covered_method_hash
