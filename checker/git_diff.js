@@ -27,8 +27,8 @@ this.diff_the_project = function (diffargs, callback){
 	});
 }
 
-diff_the_project(['5d425c8d6072fcb87512c16233057abc775ed6e4', '031667c4464c6812e9884057992d80d462b045a5'],function(diffinfo){
-	diffinfo.forEach(function(info){
-		console.log(info);
-	});
-});
+// diff_the_project(['5d425c8d6072fcb87512c16233057abc775ed6e4', '031667c4464c6812e9884057992d80d462b045a5'],function(diffinfo){
+// 	diffinfo.forEach(function(info){
+// 		console.log(info);
+// 	});
+// });

@@ -5,6 +5,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.ncsu.edu/DevOps-Milestones/DevOps-M4.git"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -19,7 +23,6 @@
     "mocha": "^3.2.0",
     "mock-fs": "^3.11.0",
     "random-js": "^1.0.8",
-    "regex": "^0.1.1",
     "simple-git": "^1.62.0",
     "string": "~3.3.3",
     "underscore": "^1.8.3",
