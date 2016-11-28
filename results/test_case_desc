@@ -13,18 +13,18 @@ get nautical dusk
 get night start
 should get moon illuminosity
 should get moon distance
-get solar noon
-get golden hour start
-get golden hour end
-get night end
-get nautical dawn
-get dawn
-get sunrise
-get sunriseEnd
-get sunsetStart
-get sunset
-get dusk
-get nautical dusk
-get night start
-should get moon illuminosity
-should get moon distance
+get solar noon2
+get golden hour start2
+get golden hour end2
+get night end2
+get nautical dawn2
+get dawn2
+get sunrise2
+get sunriseEnd2
+get sunsetStart2
+get sunset2
+get dusk2
+get nautical dusk2
+get night start2
+should get moon illuminosity2
+should get moon distance2
