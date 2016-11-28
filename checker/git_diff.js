@@ -1,4 +1,5 @@
-var git = require('simple-git')(__dirname + '/../../solar-calc');
+var project = __dirname + '/../../solar-calc'
+var git = require('simple-git')(project);
 var parse = require('diff-parse');
 
 this.diff_the_project = function (diffargs, callback){
