@@ -30,7 +30,7 @@ getTestFiles(function(testFiles){
 				start += 4
 				end = line.substring(start).indexOf('\'');
 				testCaseDesc += line.substring(start, start + end) + '|';
-				console.log(start + ' : ' + testCaseDesc);
+				// console.log(start + ' : ' + testCaseDesc);
 				// write test case description into file
 
 				fs.appendFile(__dirname + '/../results/commit_touched_testcases_desc', testCaseDesc, function (err) {
@@ -44,21 +44,24 @@ getTestFiles(function(testFiles){
 			
 		}).on('error', function(e) {
 			throw e;
+		}).on('close', function(e){
+
+			fs.readFile(__dirname + '/../results/commit_touched_testcases_desc', 'utf8', function (err,data) {
+			  if (err) {
+			    return console.log(err);
+			  }
+
+			  // console.log(data)
+			  // console.log(data.substring(0, data.lastIndexOf('|')))
+
+			  fs.writeFile(__dirname + '/../results/commit_touched_testcases_desc', data.substring(0, data.lastIndexOf('|')), 'utf8', function (err) {
+			     if (err) return console.log(err);
+			  });
+			});
 		});
 	});
 
-	fs.readFile(__dirname + '/../results/commit_touched_testcases_desc', 'utf8', function (err,data) {
-	  if (err) {
-	    return console.log(err);
-	  }
 
-	  console.log(data)
-	  console.log(data.substring(0, data.lastIndexOf('|')))
-
-	  fs.writeFile(__dirname + '/../results/commit_touched_testcases_desc', data.substring(0, data.lastIndexOf('|')), 'utf8', function (err) {
-	     if (err) return console.log(err);
-	  });
-	});
 
 });	
 
