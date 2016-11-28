@@ -2,18 +2,26 @@ require 'json'
 
 # /Milestone4
 class TestCoveredMethodFinder
-	def generate_csv()
+	def covered_methods(test_case_desc)
 		parent_dir_path = File.expand_path("../../../", __FILE__)
 		separated_test_folder = "#{parent_dir_path}/solar-calc/separated_tests"
 		json_file_path = "#{parent_dir_path}/solar-calc/coverage/coverage.json"
-		source_file_arr = ['moon.js', 'solarCalc.js', 'sun.js']; 
-
-		# create file to store results
-		result_file_path = "#{parent_dir_path}/DevOps-M4/test_covered_method_finder/test_covered_method.csv"
-		file = File.open(result_file_path, 'a')
-		file.puts('Test filename, Source filename, Covered methods, Touched lines')
-		file.close
-
+		source_file_arr = ['moon.js', 'solarCalc.js', 'sun.js']
+		covered_method_hash = {'moon.js' => {},
+							   'solarCalc.js'=> {},
+							   'sun.js' => {}
+							  }
+		#
+		# create csv file to store results
+		#
+		# result_file_path = "#{parent_dir_path}/DevOps-M4/test_covered_method_finder/test_covered_method.csv"
+		# file = File.open(result_file_path, 'a')
+		# file.puts('Test filename, Source filename, Covered methods, Touched lines')
+		# file.close
+		#
+		# create json file
+		result_file_path = "#{parent_dir_path}/DevOps-M4/results/test_covered_methods.json"
+		
 		# traverse separated test folder
 		Dir.foreach(separated_test_folder) do |file_name|
 			# bypass current dir and parent dir
@@ -28,7 +36,8 @@ class TestCoveredMethodFinder
 			file = File.read(json_file_path)
 			json_content = JSON.parse(file)
 			parse_istanbul_output(parent_dir_path, 
-								  source_file_arr, 
+								  source_file_arr,
+								  covered_method_hash, 
 								  file_name, 
 								  json_content, 
 								  result_file_path)
@@ -36,12 +45,42 @@ class TestCoveredMethodFinder
 	end
 
 	def parse_istanbul_output(parent_dir_path, 
-							  source_file_arr, 
+							  source_file_arr,
+							  covered_method_hash, 
 							  file_name, 
 							  json_content,
 							  result_file_path)
 
-		file = File.open(result_file_path, 'a')
+		#
+		# write csv file
+		#
+		# file = File.open(result_file_path, 'w')
+		# source_file_arr.each do |source_file|
+		# 	key = "#{parent_dir_path}/solar-calc/lib/#{source_file}"
+		# 	line_num = []
+		# 	covered_methods = []
+		# 	json_content[key]['s'].each do |map_id, value|
+		# 		if value > 0 # occur more than one line
+		# 			curr_line = json_content[key]['statementMap'][map_id]['start']['line']
+		# 			unless line_num.include? curr_line
+		# 				line_num << curr_line
+		# 				# run method_finder.js and get method name
+		# 				method_name = `cd #{parent_dir_path}/DevOps-M4/checker && \
+		# 		    	    node method_finder.js ../../solar-calc/src/#{source_file}:#{curr_line} && \
+		# 		    		cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder`
+		# 		    	covered_methods << method_name.sub("\n", '')
+		# 		    end
+		# 		end
+		# 	end
+		# 	puts "Checking covered method in [#{source_file}] by running test [#{file_name}] ..."
+		# 	puts '-' * 10
+		# 	file.puts("#{file_name}, #{source_file}, #{covered_methods.uniq.join(' | ')}, #{line_num.uniq.join('|')}")
+		# end
+		# file.close
+
+		#
+		# write json file - use method name and source filename as keys, test filename as values
+		#
 		source_file_arr.each do |source_file|
 			key = "#{parent_dir_path}/solar-calc/lib/#{source_file}"
 			line_num = []
@@ -55,17 +94,27 @@ class TestCoveredMethodFinder
 						method_name = `cd #{parent_dir_path}/DevOps-M4/checker && \
 				    	    node method_finder.js ../../solar-calc/src/#{source_file}:#{curr_line} && \
 				    		cd #{parent_dir_path}/DevOps-M4/test_covered_method_finder`
-				    	covered_methods << method_name.sub("\n", '')
+				    	method_name = method_name.sub("\n", '')
+
+				    	if !method_name.empty? and !covered_method_hash[source_file].has_key? method_name
+				    		covered_method_hash[source_file][method_name] = []
+				    	end
+
+				    	if covered_method_hash[source_file][method_name] and covered_method_hash[source_file][method_name].include? file_name
+				    		# file_name here is test case filename
+				    		covered_method_hash[source_file][method_name] << file_name
+				    	end
 				    end
 				end
 			end
 			puts "Checking covered method in [#{source_file}] by running test [#{file_name}] ..."
 			puts '-' * 10
-			file.puts("#{file_name}, #{source_file}, #{covered_methods.uniq.join(' | ')}, #{line_num.uniq.join('|')}")
 		end
+		file = File.open(result_file_path, 'w')
+		file.puts(covered_method_hash.to_json)
 		file.close
 	end
 end
 
 tcmf = TestCoveredMethodFinder.new
-tcmf.generate_csv
+tcmf.covered_methods(ARGV[0])
