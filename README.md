@@ -1,6 +1,6 @@
 # Milestone 4: Incremental Testing Toolkit
 
-###  Slides
+###  Screencast
  - [link](https://youtu.be/GsuOUdD1swY)
 
 By traditional testing technique, the testing team will run every test case in the test suite to make sure the code is not buggy and deliverable.
