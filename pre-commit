@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+
+cd ../../../
+BASEDIR=`pwd`
+DIR_M4="$BASEDIR/DevOps-M4"
+DIR_APP="$BASEDIR/solar-calc"
+
+echo $BASEDIR
+echo $DIR_M4
+echo $DIR_APP
+
+cd $DIR_M4
+cd checker
+echo '=====Step1. Find changed methods=========='
+node ./commit_changed_method_finder.js
+
+echo '=====Step2. Find touched testcases=========='
+node ./changed_method_comparator.js
+
+echo '=====Step3. Get Desc ID corresponding to testcases=========='
+node ./get_testcase_id.js
+cd ..
+CMD=`cat ./results/commit_touched_testcases_desc`
+echo $CMD
+cd $DIR_APP
+A="mocha test/test.js -g \"$CMD\" --reporter mochawesome"
+eval $A
+echo '=====Step4. Update test covered methods=========='
+cd $DIR_M4
+cd ./test_covered_method_finder
+ruby test_covered_method_finder.rb
