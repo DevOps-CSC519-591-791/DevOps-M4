@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 
-cd ../../../
+cd ../
 BASEDIR=`pwd`
 DIR_M4="$BASEDIR/DevOps-M4"
 DIR_APP="$BASEDIR/solar-calc"
