@@ -16,6 +16,10 @@ function getTestFiles(callback){
 	});
 }
 
+fs.writeFile(__dirname + '/../results/commit_touched_testcases_desc', '', function (err,data) {
+	if (err) { return console.log(err); }
+});
+
 getTestFiles(function(testFiles){
 	testFiles.forEach(function(testFileName){
 		file = readline(project + '/separated_tests/' + testFileName);

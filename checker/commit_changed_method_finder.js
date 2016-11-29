@@ -34,7 +34,7 @@ function changedMethodFinder(callback){
 }
 
 changedMethodFinder(function(changedMethod){
-	console.log(changedMethod);
+	// console.log(changedMethod);
 	fs.writeFile(__dirname + '/../results/commit_changed_method', changedMethod.toString(), function (err) {
 		  if (err) { throw err; }
 	});
