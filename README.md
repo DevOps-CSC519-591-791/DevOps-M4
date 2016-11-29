@@ -15,5 +15,7 @@ A test case is no need to test when its covered statements did not appear in `gi
 
 ### Technique details
 
-
-- 
+- We use the `diff` tool provided by `git` to find the changes between commits.
+- Our analysis unit is the function. That is, for one test case, if all of its covered function are not changed in the new commit, it won't be tested. On the contrary, it will be tested
+- We use the tool `istanbul` to find which statements one test is covered. Then we have the script to find out what functions these statemsnts are belong to.
+- We use the tool `mochawesome` to show which test case we actually tested in the new commit.
