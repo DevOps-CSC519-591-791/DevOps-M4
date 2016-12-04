@@ -71,3 +71,32 @@ The image above presents the workflow of the incremental testing toolkit. When d
   - File `test_covered_methods.json` logs relationships between test cases and methods in the structure of `filename => method name => {test case1, test case2} `.
   - File `test_covered_method_legacy.csv` records above relationships in a deprecated data structure.
  - Folder `test_covered_method_finder` stores ruby script to generate `test_covered_methods.json` and update this file during each commit.
+
+#### `pre-commit` git hook
+Below is partial content of this git hook:
+```
+echo '=====Step1. Find changed methods=========='
+node ./commit_changed_method_finder.js
+
+echo '=====Step2. Find touched testcases=========='
+node ./changed_method_comparator.js
+
+echo '=====Step3. Get Desc ID corresponding to testcases=========='
+node ./get_testcase_id.js
+cd ..
+CMD=`cat ./results/commit_touched_testcases_desc`
+echo $CMD
+cd $DIR_APP
+A="mocha test/test.js -g \"$CMD\" --reporter mochawesome"
+eval $A
+echo '=====Step4. Update test covered methods=========='
+cd $DIR_M4
+cd ./test_covered_method_finder
+ruby test_covered_method_finder.rb
+```
+Basically, this hook executes four steps:
+ - The first step is to find the changed methods by executing `commit_changed_method_finder.js` script.
+ - The second step is to find the touched test cases according the results of last step and running `changed_method_comparator.js` script.
+ - The third step is to obtain the descriptions of test cases by running `get_testcase_id.js` and generate report via `mochawesome`. 
+ - The last step is to update `test_covered_methods.json` by executing `test_covered_method_finder.rb` ruby script.
+
