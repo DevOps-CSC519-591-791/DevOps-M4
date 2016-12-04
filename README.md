@@ -1,16 +1,16 @@
 # DevOps-M4: Incremental Testing Toolkit
-This is the repository for [DevOps special milestone](https://github.com/CSC-DevOps/Course/blob/master/Project/M4.md).We built an incremental testing toolkit to achieve test priority. And we use [solar-calc](https://github.ncsu.edu/DevOps-Milestones/solar-calc) as our node.js application.
+This is the repository for [DevOps special milestone](https://github.com/CSC-DevOps/Course/blob/master/Project/M4.md).We built an incremental testing toolkit to achieve test priority purpose. And we use [solar-calc](https://github.ncsu.edu/DevOps-Milestones/solar-calc) as our node.js application.
  - Node.js application: [link](https://github.ncsu.edu/DevOps-Milestones/solar-calc)
  - Screencast: [link](https://youtu.be/GsuOUdD1swY)
 
 ### Introduction
-In the traditional testing technique, the testing team will run every test case in the test suite to make sure the code is not buggy and deliverable.
-However, in many times, running one test case is time-consuming, especially for some complex projects.
+In the traditional testing technique, the testing team will run every test case in the test suite to make sure the code is robust and deliverable.
+However, in many times, running all test cases is time-consuming, especially for some complex projects.
 
-Here we introduced a tool to perform the incremental testing.  At each time the code wants to merge to the product code repo, our tool will analysis which part of the code is modified, comparing to the existed delivered code via `git diff`.  Then our tool analysis which test cases should or should not be tested. One test case might not be tested since, according to the history record, it did not touch the modified code.
+Here we introduced a tool to perform the incremental testing.  At each time the code wants to merge to the master branch of remote code repository, our tool will analysis which part of the code is modified, comparing to the existed delivered code via `git diff`.  Then our tool analysis which test cases should or should not be tested. One test case might not be tested since, according to the history record, it did not touch the modified code.
 
 ### Purpose
- - When testing the project, determine which test case is unnecessary to test and skip that case. 
+ - When testing the project, determine which tests case are unnecessary and skip those cases. 
  - A test case is no need to test when its covered statements did not appear in `git diff`.
 
 ### Workflow
