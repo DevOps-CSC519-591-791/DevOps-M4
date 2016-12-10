@@ -1,5 +1,5 @@
 # DevOps-M4: Incremental Testing Toolkit
-This is the repository for [DevOps special milestone](https://github.com/CSC-DevOps/Course/blob/master/Project/M4.md).We built an incremental testing toolkit to achieve test priority purpose. And we use [solar-calc](https://github.ncsu.edu/DevOps-Milestones/solar-calc) as our node.js application.
+This is the repository for [DevOps special milestone](https://github.com/CSC-DevOps/Course/blob/master/Project/M4.md). We built an incremental testing toolkit to achieve test priority purpose. And we use [solar-calc](https://github.ncsu.edu/DevOps-Milestones/solar-calc) as our node.js application.
  - Node.js application: [link](https://github.ncsu.edu/DevOps-Milestones/solar-calc)
  - Screencast: [link](https://youtu.be/GsuOUdD1swY)
 
@@ -14,7 +14,7 @@ Here we introduced a tool to perform the incremental testing.  At each time the 
  - A test case is no need to test when its covered statements did not appear in `git diff`.
 
 ### Workflow
-![](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/images/M4-workflow.png)
+![](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/images/M4-workflow.png)
 The image above presents the workflow of the incremental testing toolkit. When developers try to commit their modifications, our toolkit will check the difference between current work directory and last or previous commit via `git diff` command. Then the toolkit finds the touched lines of code, in other words, modified lines of code. According to line modification information, the toolkit looks for the corresponding methods. In the meanwhile, the toolkit has already parsed all existing test cases and found out the touched methods by each test case. The last step is to run only certain test cases instead of the whole test suite.
 
 ### Technique Summary
@@ -55,9 +55,9 @@ The image above presents the workflow of the incremental testing toolkit. When d
     └── test_covered_method_finder.rb
 ```
  - Folder `checker` stores the majority of scripts for incremental testing toolkit.
-  - Script `changed_method_comparator.js` reads the changed methods information from [commit_changed_method](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/results/commit_changed_method), finds the corresponding test cases from [test_covered_methods.json](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/results/test_covered_methods.json) and writes the filenames of test cases into [commit_touched_testcases](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/results/commit_touched_testcases) file.
-  - Script `commit_changed_method_finder.js` requires [git_diff.js](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/checker/git_diff.js), finds the commit changed methods by calling [method_finder.js](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/checker/method_finder.js).
-  - Script `get_testcase_id.js` gets the test case filenames from [commit_touched_testcases](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/results/commit_touched_testcases), uses test case descriptions in the format of `test desc 1|test desc 2|test desc 3` and writes into file [commit_touched_testcases_desc](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/results/commit_touched_testcases_desc). The bar-separated format is used for mocha `grep` option.
+  - Script `changed_method_comparator.js` reads the changed methods information from [commit_changed_method](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/results/commit_changed_method), finds the corresponding test cases from [test_covered_methods.json](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/results/test_covered_methods.json) and writes the filenames of test cases into [commit_touched_testcases](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/results/commit_touched_testcases) file.
+  - Script `commit_changed_method_finder.js` requires [git_diff.js](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/checker/git_diff.js), finds the commit changed methods by calling [method_finder.js](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/checker/method_finder.js).
+  - Script `get_testcase_id.js` gets the test case filenames from [commit_touched_testcases](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/results/commit_touched_testcases), uses test case descriptions in the format of `test desc 1|test desc 2|test desc 3` and writes into file [commit_touched_testcases_desc](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/results/commit_touched_testcases_desc). The bar-separated format is used for mocha `grep` option.
   - Script `git_diff.js` is able to find the changes between current work directory and last or previous commit.
   - Script `method_finder.js` requires `esprima` to generate AST tree, and finds methods by offering filename and certain line number.
   - Script `test_covered_method_finder_legacy.js` and `test_separator_legacy.js` are two legacy scripts not been used any more.
@@ -101,17 +101,17 @@ Basically, this hook executes four steps:
  - The last step is to update `test_covered_methods.json` by executing `test_covered_method_finder.rb` ruby script.
 
 Below is the screenshot of report generated by `mochawesome` with all 30 test cases being ran originally.
-![](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/images/30-tests.png)
+![](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/images/30-tests.png)
 
 Below is the screenshot of terminal output of pre-commit hook.
-![](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/images/terminal-output.png)
+![](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/images/terminal-output.png)
 
 Below is the screenshot of report generated by `mochawesome` with only 2 out of 30 test cases being run by implementing our incremental testing toolkit.
-![](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/images/2-tests.png)
+![](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/images/2-tests.png)
 
 
 ### Incremental Testing Toolkit in Whole Pipeline
-![](https://github.ncsu.edu/DevOps-Milestones/DevOps-M4/blob/master/images/M1-4%20workflow.png)
+![](https://github.com/DevOps-CSC519-591-791/DevOps-M4/tree/master/images/M1-4%20workflow.png)
 This the workflow of the whole pipeline. As you can see our incremental testing toolkit actually occurs before the first milestone. And it executes test cases with higher priority, which saves developers lots of time. And the benefit will be more obvious when implementing out toolkit in a larger project with more test cases.
 
 ### Reference
